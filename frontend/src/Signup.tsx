@@ -16,7 +16,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://4szijqjuv8.execute-api.us-east-1.amazonaws.com/prod';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -38,7 +38,7 @@ const Signup: React.FC = () => {
       await axios.post(`${API_URL}/signup`, { username, password });
       toast({
         title: "Account created.",
-        description: "We've created your account for you.",
+        description: "Welcome to the Star Wars Database!",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -55,34 +55,38 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
+    <Flex minHeight="100vh" width="full" align="center" justifyContent="center" bg="brand.800">
       <Container maxW="lg" py={12}>
         <VStack spacing={8} w="full">
-          <Heading>Sign Up</Heading>
-          {error && <Text color="red.500">{error}</Text>}
+          <Heading color="accent.yellow">Join the Star Wars Database</Heading>
+          {error && <Text color="accent.red">{error}</Text>}
           <Box as="form" onSubmit={handleSignup} width="full">
             <VStack spacing={4}>
               <FormControl isRequired>
-                <FormLabel>Username</FormLabel>
+                <FormLabel color="brand.300">Username</FormLabel>
                 <Input 
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  bg="brand.700"
+                  color="brand.100"
                 />
               </FormControl>
               <FormControl isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel color="brand.300">Password</FormLabel>
                 <Input 
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  bg="brand.700"
+                  color="brand.100"
                 />
               </FormControl>
-              <Button type="submit" colorScheme="blue" width="full">Sign Up</Button>
+              <Button type="submit" colorScheme="yellow" width="full">Sign Up</Button>
             </VStack>
           </Box>
-          <Text>
-            Already have an account? <ChakraLink as={Link} to="/login" color="blue.500">Login</ChakraLink>
+          <Text color="brand.300">
+            Already have an account? <ChakraLink as={Link} to="/login" color="accent.blue">Login</ChakraLink>
           </Text>
         </VStack>
       </Container>

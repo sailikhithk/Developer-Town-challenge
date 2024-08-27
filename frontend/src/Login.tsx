@@ -3,7 +3,7 @@ import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://4szijqjuv8.execute-api.us-east-1.amazonaws.com/prod';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -24,34 +24,38 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
+    <Flex minHeight="100vh" width="full" align="center" justifyContent="center" bg="brand.800">
       <Container maxW="lg" py={12}>
         <VStack spacing={8} w="full">
-          <Heading>Login</Heading>
-          {error && <Text color="red.500">{error}</Text>}
+          <Heading color="accent.yellow">Login to Star Wars Database</Heading>
+          {error && <Text color="accent.red">{error}</Text>}
           <Box as="form" onSubmit={handleLogin} width="full">
             <VStack spacing={4}>
               <FormControl isRequired>
-                <FormLabel>Username</FormLabel>
+                <FormLabel color="brand.300">Username</FormLabel>
                 <Input 
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  bg="brand.700"
+                  color="brand.100"
                 />
               </FormControl>
               <FormControl isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel color="brand.300">Password</FormLabel>
                 <Input 
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  bg="brand.700"
+                  color="brand.100"
                 />
               </FormControl>
-              <Button type="submit" colorScheme="blue" width="full">Login</Button>
+              <Button type="submit" colorScheme="yellow" width="full">Login</Button>
             </VStack>
           </Box>
-          <Text>
-            Don't have an account? <ChakraLink as={Link} to="/signup" color="blue.500">Sign up</ChakraLink>
+          <Text color="brand.300">
+            Don't have an account? <ChakraLink as={Link} to="/signup" color="accent.blue">Sign up</ChakraLink>
           </Text>
         </VStack>
       </Container>

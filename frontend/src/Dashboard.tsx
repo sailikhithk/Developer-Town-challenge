@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Heading, Select, Table, Thead, Tbody, Tr, Th, Td, VStack, Container } from "@chakra-ui/react";
+import { Box, Heading, Select, Table, Thead, Tbody, Tr, Th, Td, VStack, Container, Text } from "@chakra-ui/react";
 import axios from 'axios';
 
 interface Starship {
@@ -9,7 +9,7 @@ interface Starship {
   cost_in_credits: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://4szijqjuv8.execute-api.us-east-1.amazonaws.com/prod';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Dashboard: React.FC = () => {
   const [starships, setStarships] = useState<Starship[]>([]);
@@ -53,14 +53,18 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Container maxW="100%" p={0}>
-      <VStack spacing={4} align="stretch" width="full">
-        <Heading textAlign="center" my={4}>Star Wars Starships</Heading>
+    <Container maxW="100%" p={0} bg="brand.800" minH="100vh">
+      <VStack spacing={4} align="stretch" width="full" p={4}>
+        <Heading textAlign="center" my={4} color="accent.yellow">Star Wars Starships</Heading>
         <Select 
           placeholder="Select manufacturer"
           value={selectedManufacturer} 
           onChange={(e) => setSelectedManufacturer(e.target.value)}
           mb={4}
+          bg="brand.700"
+          color="brand.100"
+          borderColor="brand.600"
+          _hover={{ borderColor: "accent.blue" }}
         >
           <option value="">All Manufacturers</option>
           {manufacturers.map((manufacturer) => (
@@ -73,19 +77,19 @@ const Dashboard: React.FC = () => {
           <Table variant="simple" size="sm">
             <Thead>
               <Tr>
-                <Th>Name</Th>
-                <Th>Model</Th>
-                <Th>Manufacturer</Th>
-                <Th>Cost in Credits</Th>
+                <Th color="accent.blue">Name</Th>
+                <Th color="accent.blue">Model</Th>
+                <Th color="accent.blue">Manufacturer</Th>
+                <Th color="accent.blue">Cost in Credits</Th>
               </Tr>
             </Thead>
             <Tbody>
               {starships.map((ship) => (
                 <Tr key={ship.name}>
-                  <Td>{ship.name}</Td>
-                  <Td>{ship.model}</Td>
-                  <Td>{ship.manufacturer}</Td>
-                  <Td>{ship.cost_in_credits}</Td>
+                  <Td color="brand.100">{ship.name}</Td>
+                  <Td color="brand.100">{ship.model}</Td>
+                  <Td color="brand.100">{ship.manufacturer}</Td>
+                  <Td color="brand.100">{ship.cost_in_credits}</Td>
                 </Tr>
               ))}
             </Tbody>
