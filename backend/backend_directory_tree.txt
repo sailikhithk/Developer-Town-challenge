@@ -1,0 +1,9 @@
+Folder PATH listing
+Volume serial number is 00740069 58C0:B943
+C:.
+|   .env
+|   .gitignore
+|   app.py
+|   backend_directory_tree.txt
+|   Makefile
+|   requirements.txt

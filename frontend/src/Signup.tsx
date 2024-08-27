@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link as ChakraLink, Container, Flex } from "@chakra-ui/react";
+import { 
+  Box, 
+  Button, 
+  FormControl, 
+  FormLabel, 
+  Input, 
+  VStack, 
+  Heading, 
+  Text, 
+  Link as ChakraLink, 
+  Container, 
+  Flex, 
+  useToast
+} from "@chakra-ui/react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,14 +23,33 @@ const Signup: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
+    if (!username || !password) {
+      setError('Username and password are required');
+      return;
+    }
+
     try {
       await axios.post(`${API_URL}/signup`, { username, password });
+      toast({
+        title: "Account created.",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       navigate('/login');
     } catch (error) {
-      setError('Signup failed. Please try again.');
+      if (axios.isAxiosError(error) && error.response) {
+        setError(error.response.data.error || 'Signup failed. Please try again.');
+      } else {
+        setError('Signup failed. Please try again.');
+      }
       console.error('Signup failed:', error);
     }
   };
