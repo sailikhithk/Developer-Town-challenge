@@ -300,6 +300,14 @@ Then created AWS Dynamodb table with this configuration
 aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
 ![WhatsApp Image 2024-08-27 at 02 49 06_e228c7ce](https://github.com/user-attachments/assets/82bd38e5-78a2-4e04-a4ea-77256252cf01)
 
+## IAM role creation to assign to lambda:
+![image](https://github.com/user-attachments/assets/72dd3bce-543d-4aba-abb3-dd1ca90f8674)
+
+
 ## Lambda Deployment
 ![image](https://github.com/user-attachments/assets/a7e05384-0be5-43ba-b9ac-c289ebdebbf8)
+![image](https://github.com/user-attachments/assets/34752046-cee7-4b64-822a-ee6843f86d16)
+
+## API Gateway Configuring
+
 
