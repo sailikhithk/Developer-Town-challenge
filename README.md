@@ -321,6 +321,9 @@ Enable versioning in s3 bucket
 Enable static content hosting
 ![image](https://github.com/user-attachments/assets/730bfcb8-38a2-4bc3-aa6c-2f2e0e492699)
 
+Move frontend build here
+![image](https://github.com/user-attachments/assets/b8cce215-aecc-45e8-a1ae-dee32b82d7b6)
+
 
 ## API Gateway Configuring
 
