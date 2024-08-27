@@ -298,3 +298,7 @@ Since im using local powershell, i can execute multi-line directly, so created i
 Then created AWS Dynamodb table with this configuration
 
 aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
+
+## Lambda Deployment
+![image](https://github.com/user-attachments/assets/a7e05384-0be5-43ba-b9ac-c289ebdebbf8)
+
