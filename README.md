@@ -27,6 +27,17 @@ Based on what i understood, i have made a requirement checklist so that i can co
 # Mockups
 ## Signup Portal After Starwars theme 
 ![image](https://github.com/user-attachments/assets/4ac9759e-6c24-40b0-8df2-33ebb90b600c)
+
+## Login Portal After the Starwars theme i applied now
+![image](https://github.com/user-attachments/assets/df296d86-530b-4b92-83f2-5c5bd432c741)
+
+## Manufacturers List After the Starwars theme
+![image](https://github.com/user-attachments/assets/c311e7c4-2097-4c38-b71e-6a3f0b17dc7d)
+
+
+
+
+
 ## Signup Portal Before Starwars theme
 ![image](https://github.com/user-attachments/assets/5ed7f924-c0b4-46fe-a3e5-6948f204a6a7)
 ### User Already Exists
