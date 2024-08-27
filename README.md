@@ -315,7 +315,11 @@ aws s3 mb s3://starwarsbff --region us-east-1
 ![image](https://github.com/user-attachments/assets/706269f0-0cd8-425f-be93-099512cda05c)
 ![image](https://github.com/user-attachments/assets/27d0f6ec-3189-4e4d-b2f9-e99b1e5d1cd0)
 
+Enable versioning in s3 bucket
+![image](https://github.com/user-attachments/assets/84e8d0df-b44c-4d1a-9605-d7e182c18b4f)
+
 ## API Gateway Configuring
+
 
 
 
