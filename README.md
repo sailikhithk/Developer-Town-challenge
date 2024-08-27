@@ -310,6 +310,13 @@ aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions
 ![image](https://github.com/user-attachments/assets/a7e05384-0be5-43ba-b9ac-c289ebdebbf8)
 ![image](https://github.com/user-attachments/assets/34752046-cee7-4b64-822a-ee6843f86d16)
 
+## s3 deployment
+aws s3 mb s3://starwarsbff --region us-east-1
+![image](https://github.com/user-attachments/assets/706269f0-0cd8-425f-be93-099512cda05c)
+![image](https://github.com/user-attachments/assets/27d0f6ec-3189-4e4d-b2f9-e99b1e5d1cd0)
+
 ## API Gateway Configuring
+
+
 
 
