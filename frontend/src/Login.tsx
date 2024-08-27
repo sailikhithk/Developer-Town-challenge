@@ -24,8 +24,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Flex minHeight="100vh" width="full" align="center" justifyContent="center" bg="brand.800">
-      <Container maxW="lg" py={12}>
+    <Flex 
+      minHeight="100vh" 
+      width="full" 
+      align="center" 
+      justifyContent="center" 
+      layerStyle="starWarsBackground"
+    >
+      <Container maxW="lg" py={12} bg="rgba(0, 0, 0, 0.7)" borderRadius="md" boxShadow="xl">
         <VStack spacing={8} w="full">
           <Heading color="accent.yellow">Login to Star Wars Database</Heading>
           {error && <Text color="accent.red">{error}</Text>}

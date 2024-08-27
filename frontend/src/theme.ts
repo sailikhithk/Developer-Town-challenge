@@ -1,26 +1,9 @@
 // src/theme.ts
 import { extendTheme } from "@chakra-ui/react";
+import starWarsBackground from './assets/star-wars.webp';
+import starShipsBackground from './assets/star-ships.jpg';
 
 const starWarsTheme = extendTheme({
-  colors: {
-    brand: {
-      100: "#edf2f7", // Light gray for backgrounds
-      200: "#e2e8f0", // Lighter gray for hover states
-      300: "#cbd5e0", // Gray for borders
-      400: "#a0aec0", // Mid gray for secondary text
-      500: "#718096", // Dark gray for primary text
-      600: "#4a5568", // Darker gray for headings
-      700: "#2d3748", // Very dark gray for backgrounds
-      800: "#1a202c", // Almost black for main background
-      900: "#171923", // Black for text on light backgrounds
-    },
-    accent: {
-      blue: "#0ff0fc", // Lightsaber blue
-      red: "#ff0000", // Lightsaber red
-      green: "#4fef1e", // Lightsaber green
-      yellow: "#ffe81f", // Star Wars logo yellow
-    },
-  },
   styles: {
     global: {
       body: {
@@ -60,6 +43,43 @@ const starWarsTheme = extendTheme({
         },
       },
     },
+  },
+  colors: {
+    brand: {
+      100: "#edf2f7",
+      200: "#e2e8f0",
+      300: "#cbd5e0",
+      400: "#a0aec0",
+      500: "#718096",
+      600: "#4a5568",
+      700: "#2d3748",
+      800: "#1a202c",
+      900: "#171923",
+    },
+    accent: {
+      blue: "#0ff0fc",
+      red: "#ff0000",
+      green: "#4fef1e",
+      yellow: "#ffe81f",
+    },
+  },
+  layerStyles: {
+    base: {
+      bg: "brand.800",
+      color: "brand.100",
+    },
+    starWarsBackground: {
+      bg: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${starWarsBackground})`,
+      bgSize: "cover",
+      bgPosition: "center",
+      bgRepeat: "no-repeat",
+    },
+    dashboardBackground: {
+        bg: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${starShipsBackground})`,
+        bgSize: "cover",
+        bgPosition: "center",
+        bgRepeat: "no-repeat",
+      },
   },
 });
 

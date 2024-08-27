@@ -8,8 +8,10 @@ C:\USERS\LIKKI\DOWNLOADS\GITHUB\DEVELOPER-TOWN-CHALLENGE\FRONTEND\SRC
 |   Login.tsx
 |   main.tsx
 |   Signup.tsx
+|   theme.ts
 |   vite-env.d.ts
 |   
 \---assets
         react.svg
+        star-wars.webp
         

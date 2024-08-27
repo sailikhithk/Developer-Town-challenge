@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Heading, Select, Table, Thead, Tbody, Tr, Th, Td, VStack, Container, Text } from "@chakra-ui/react";
+import { Box, Heading, Select, Table, Thead, Tbody, Tr, Th, Td, VStack, Container, Text, Flex } from "@chakra-ui/react";
 import axios from 'axios';
 
 interface Starship {
@@ -53,50 +53,66 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Container maxW="100%" p={0} bg="brand.800" minH="100vh">
-      <VStack spacing={4} align="stretch" width="full" p={4}>
-        <Heading textAlign="center" my={4} color="accent.yellow">Star Wars Starships</Heading>
-        <Select 
-          placeholder="Select manufacturer"
-          value={selectedManufacturer} 
-          onChange={(e) => setSelectedManufacturer(e.target.value)}
-          mb={4}
-          bg="brand.700"
-          color="brand.100"
-          borderColor="brand.600"
-          _hover={{ borderColor: "accent.blue" }}
-        >
-          <option value="">All Manufacturers</option>
-          {manufacturers.map((manufacturer) => (
-            <option key={manufacturer} value={manufacturer}>
-              {manufacturer}
-            </option>
-          ))}
-        </Select>
-        <Box overflowX="auto">
-          <Table variant="simple" size="sm">
-            <Thead>
-              <Tr>
-                <Th color="accent.blue">Name</Th>
-                <Th color="accent.blue">Model</Th>
-                <Th color="accent.blue">Manufacturer</Th>
-                <Th color="accent.blue">Cost in Credits</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {starships.map((ship) => (
-                <Tr key={ship.name}>
-                  <Td color="brand.100">{ship.name}</Td>
-                  <Td color="brand.100">{ship.model}</Td>
-                  <Td color="brand.100">{ship.manufacturer}</Td>
-                  <Td color="brand.100">{ship.cost_in_credits}</Td>
+    <Flex 
+      direction="column" 
+      minHeight="100vh" 
+      width="full" 
+      layerStyle="dashboardBackground"
+    >
+      <Container maxW="container.xl" p={4}>
+        <VStack spacing={8} align="stretch" width="full">
+          <Heading textAlign="center" my={4} color="accent.yellow" fontSize="4xl">Star Wars Starships</Heading>
+          <Select 
+            placeholder="Select manufacturer"
+            value={selectedManufacturer} 
+            onChange={(e) => setSelectedManufacturer(e.target.value)}
+            bg="rgba(0, 0, 0, 0.7)"
+            color="accent.yellow"
+            borderColor="accent.blue"
+            _hover={{ borderColor: "accent.yellow" }}
+            _focus={{ borderColor: "accent.yellow", boxShadow: "0 0 0 1px #ffe81f" }}
+            sx={{
+              "& option": {
+                bg: "brand.800",
+                color: "accent.yellow",
+              },
+              "& option:hover": {
+                bg: "brand.700",
+              },
+            }}
+          >
+            <option value="">All Manufacturers</option>
+            {manufacturers.map((manufacturer) => (
+              <option key={manufacturer} value={manufacturer}>
+                {manufacturer}
+              </option>
+            ))}
+          </Select>
+          <Box overflowX="auto" bg="rgba(0, 0, 0, 0.7)" borderRadius="md" boxShadow="xl">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th color="accent.blue">Name</Th>
+                  <Th color="accent.blue">Model</Th>
+                  <Th color="accent.blue">Manufacturer</Th>
+                  <Th color="accent.blue">Cost in Credits</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </Box>
-      </VStack>
-    </Container>
+              </Thead>
+              <Tbody>
+                {starships.map((ship) => (
+                  <Tr key={ship.name}>
+                    <Td color="brand.100">{ship.name}</Td>
+                    <Td color="brand.100">{ship.model}</Td>
+                    <Td color="brand.100">{ship.manufacturer}</Td>
+                    <Td color="brand.100">{ship.cost_in_credits}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+        </VStack>
+      </Container>
+    </Flex>
   );
 };
 

@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "beb209e3-f549-4045-bd98-25ef4b467e50",
+		"name": "StarwarsAPI-DeveloperTown Latest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29254636",
+		"_collection_link": "https://cloudy-star-341327.postman.co/workspace/Sai-Projects~6801ca7b-a2a5-410e-98a8-c418ba9e7bfb/collection/29254636-beb209e3-f549-4045-bd98-25ef4b467e50?action=share&source=collection_link&creator=29254636"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"newpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/signup",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"access_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"newpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Starships",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "43578551-2920-4a97-838e-45573bca16aa",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/starships",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"starships"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Starships by Manufacturer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "43578551-2920-4a97-838e-45573bca16aa",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/starships?manufacturer=Incom Corporation",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"starships"
+					],
+					"query": [
+						{
+							"key": "manufacturer",
+							"value": "Incom Corporation"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Manufacturers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "43578551-2920-4a97-838e-45573bca16aa",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/manufacturers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"manufacturers"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "inherit"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}
