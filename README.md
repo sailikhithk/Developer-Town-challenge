@@ -318,7 +318,13 @@ aws s3 mb s3://starwarsbff --region us-east-1
 Enable versioning in s3 bucket
 ![image](https://github.com/user-attachments/assets/84e8d0df-b44c-4d1a-9605-d7e182c18b4f)
 
+Enable static content hosting
+![image](https://github.com/user-attachments/assets/730bfcb8-38a2-4bc3-aa6c-2f2e0e492699)
+
+
 ## API Gateway Configuring
+
+
 
 
 
