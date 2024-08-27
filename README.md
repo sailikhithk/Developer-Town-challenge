@@ -25,7 +25,9 @@ Based on what i understood, i have made a requirement checklist so that i can co
 - [x] Implement routing for login, signup, and dashboard pages
 
 # Mockups
-## Signup Portal
+## Signup Portal After Starwars theme 
+![image](https://github.com/user-attachments/assets/4ac9759e-6c24-40b0-8df2-33ebb90b600c)
+## Signup Portal Before Starwars theme
 ![image](https://github.com/user-attachments/assets/5ed7f924-c0b4-46fe-a3e5-6948f204a6a7)
 ### User Already Exists
 ![image](https://github.com/user-attachments/assets/7a566a4c-c9ed-4a2b-a59d-bdf8cfc05e83)
