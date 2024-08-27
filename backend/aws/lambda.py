@@ -1,147 +1,172 @@
 import json
-import os
 import boto3
-import bcrypt
-import uuid
-import requests
+import hashlib
 from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key, Attr
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(os.environ['TABLE_NAME'])
+users_table = dynamodb.Table('StarWarsStarShipsUsers')
+starships_table = dynamodb.Table('StarWarsStarships')
 
 def lambda_handler(event, context):
-    http_method = event['httpMethod']
-    path = event['path']
-    
-    if http_method == 'POST':
-        if path == '/signup':
-            return signup(json.loads(event['body']))
-        elif path == '/login':
-            return login(json.loads(event['body']))
-    elif http_method == 'GET':
-        token = event['headers'].get('Authorization', '').split()[-1]
-        if not is_valid_token(token):
-            return {
-                'statusCode': 401,
-                'body': json.dumps({'error': 'Unauthorized'})
-            }
-        if path == '/starships':
-            return get_starships(event['queryStringParameters'])
-        elif path == '/manufacturers':
-            return get_manufacturers()
-    
-    return {
-        'statusCode': 404,
-        'body': json.dumps({'error': 'Not Found'})
-    }
+    route_key = event.get('httpMethod') + ' ' + event.get('path')
 
-def signup(data):
-    username = data.get('username')
-    password = data.get('password')
-    
-    if not username or not password:
+    if route_key == 'POST /signup':
+        return signup_user(event)
+    elif route_key == 'POST /login':
+        return login_user(event)
+    elif route_key == 'GET /dashboard':
+        return get_manufacturers_dashboard()
+    elif route_key == 'GET /starships':
+        return get_starships_by_manufacturer(event)
+    elif route_key == 'GET /manufacturers':
+        return get_manufacturers()
+    else:
         return {
-            'statusCode': 400,
-            'body': json.dumps({'error': 'Username and password are required'})
+            'statusCode': 404,
+            'body': json.dumps({'message': 'Route not found'})
         }
-    
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    
+
+def signup_user(event):
+    body = json.loads(event['body'])
+    username = body['username']
+    password = body['password']
+
+    # Hash the password using hashlib
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
     try:
-        table.put_item(
+        # Put item into DynamoDB
+        response = users_table.put_item(
             Item={
-                'PK': f'USER#{username}',
-                'SK': 'PROFILE',
-                'username': username,
-                'password': hashed_password
+                'username': username,        # Partition key
+                'password': hashed_password  # Non-key attribute
             },
-            ConditionExpression='attribute_not_exists(PK)'
+            ConditionExpression='attribute_not_exists(username)'  # Ensure the username is unique
         )
         return {
             'statusCode': 201,
-            'body': json.dumps({'message': 'User created successfully'})
+            'body': json.dumps({'message': 'User created successfully!'})
         }
     except ClientError as e:
         if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
             return {
-                'statusCode': 409,
-                'body': json.dumps({'error': 'Username already exists'})
+                'statusCode': 400,
+                'body': json.dumps({'message': 'Username already exists'})
             }
         else:
             return {
                 'statusCode': 500,
-                'body': json.dumps({'error': 'An error occurred during signup'})
+                'body': json.dumps({'message': 'Internal server error'})
             }
 
-def login(data):
-    username = data.get('username')
-    password = data.get('password')
-    
+def login_user(event):
+    body = json.loads(event['body'])
+    username = body['username']
+    password = body['password']
+
+    # Hash the incoming password to compare with the stored hash
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
     try:
-        response = table.get_item(Key={'PK': f'USER#{username}', 'SK': 'PROFILE'})
-        user = response.get('Item')
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-            token = str(uuid.uuid4())
-            table.put_item(Item={
-                'PK': f'TOKEN#{token}',
-                'SK': 'AUTH',
+        # Retrieve the user from DynamoDB
+        response = users_table.get_item(
+            Key={
                 'username': username
-            })
+            }
+        )
+        item = response.get('Item')
+        if not item:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'message': 'Invalid username or password'})
+            }
+
+        # Verify the password
+        if hashed_password == item['password']:
             return {
                 'statusCode': 200,
-                'body': json.dumps({'access_token': token, 'token_type': 'bearer'})
+                'body': json.dumps({'message': 'Login successful'})
             }
         else:
             return {
-                'statusCode': 401,
-                'body': json.dumps({'error': 'Invalid credentials'})
+                'statusCode': 400,
+                'body': json.dumps({'message': 'Invalid username or password'})
             }
-    except ClientError:
+    except ClientError as e:
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'An error occurred during login'})
+            'body': json.dumps({'message': 'Internal server error'})
         }
 
-def is_valid_token(token):
+def get_manufacturers_dashboard():
     try:
-        response = table.get_item(Key={'PK': f'TOKEN#{token}', 'SK': 'AUTH'})
-        return 'Item' in response
-    except ClientError:
-        return False
+        # Scan the StarWarsStarships table to get all manufacturers and starships
+        response = starships_table.scan()
 
-def get_starships(query_params):
-    manufacturer = query_params.get('manufacturer') if query_params else None
-    
-    try:
-        response = requests.get("https://swapi.dev/api/starships/")
-        all_starships = response.json()["results"]
-        
-        if manufacturer:
-            filtered_starships = [ship for ship in all_starships if ship['manufacturer'] == manufacturer]
-        else:
-            filtered_starships = all_starships
+        # Process the items to create a dashboard summary
+        items = response.get('Items', [])
+        manufacturers = {}
+        for item in items:
+            manufacturer = item['manufacturer']
+            name = item['name']
+            if manufacturer not in manufacturers:
+                manufacturers[manufacturer] = []
+            manufacturers[manufacturer].append(name)
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps(filtered_starships)
-        }
-    except requests.RequestException:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'error': 'An error occurred while fetching starship data'})
-        }
-
-def get_manufacturers():
-    try:
-        response = requests.get("https://swapi.dev/api/starships/")
-        all_starships = response.json()["results"]
-        manufacturers = list(set(ship['manufacturer'] for ship in all_starships))
         return {
             'statusCode': 200,
             'body': json.dumps(manufacturers)
         }
-    except requests.RequestException:
+    except ClientError as e:
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'An error occurred while fetching manufacturer data'})
+            'body': json.dumps({'message': 'Internal server error'})
+        }
+
+def get_starships_by_manufacturer(event):
+    try:
+        # Extract the manufacturer query parameter
+        manufacturer = event.get('queryStringParameters', {}).get('manufacturer')
+
+        if not manufacturer:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'message': 'Manufacturer query parameter is required'})
+            }
+
+        # Query the StarWarsStarships table by manufacturer using the GSI
+        response = starships_table.query(
+            IndexName='ManufacturerIndex',
+            KeyConditionExpression=Key('manufacturer').eq(manufacturer)
+        )
+
+        starships = response.get('Items', [])
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps(starships)
+        }
+    except ClientError as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'message': 'Internal server error'})
+        }
+
+def get_manufacturers():
+    try:
+        # Scan the StarWarsStarships table to get all manufacturers
+        response = starships_table.scan()
+
+        items = response.get('Items', [])
+        manufacturers = set(item['manufacturer'] for item in items)
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps(list(manufacturers))
+        }
+    except ClientError as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'message': 'Internal server error'})
         }
