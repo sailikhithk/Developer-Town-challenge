@@ -24,6 +24,25 @@ Based on what i understood, i have made a requirement checklist so that i can co
 - [x] Added signup functionality
 - [x] Implement routing for login, signup, and dashboard pages
 
+# Mockups
+## Signup Portal
+![image](https://github.com/user-attachments/assets/5ed7f924-c0b4-46fe-a3e5-6948f204a6a7)
+### User Already Exists
+![image](https://github.com/user-attachments/assets/7a566a4c-c9ed-4a2b-a59d-bdf8cfc05e83)
+### Signup to route to Login on successful Signup
+![image](https://github.com/user-attachments/assets/1576062d-c9f6-4b97-9a6c-c01b27f10306)
+
+
+
+## Login
+### If no user exists
+![image](https://github.com/user-attachments/assets/b0ed0bec-24c6-4bf9-bfb0-571576667451)
+### Successful Login to Dashboards
+![image](https://github.com/user-attachments/assets/a51ae4ff-3846-4707-b9e5-19d1af573677)
+### Filter selected manufacturer only
+![image](https://github.com/user-attachments/assets/ae314472-4f73-4019-ac81-aac4d0380635)
+
+
 ## Detailed Implementation Checklist
 
 - [x] Backend using Python (Flask)
@@ -247,14 +266,35 @@ npm run build
 
 
 
-# AWS
 
-aws dynamodb create-table \
-  --table-name starwarsBFF \
-  --attribute-definitions \
-    AttributeName=PK,AttributeType=S \
-    AttributeName=SK,AttributeType=S \
-  --key-schema \
-    AttributeName=PK,KeyType=HASH \
-    AttributeName=SK,KeyType=RANGE \
-  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+# AWS Deployment
+
+## AWS DynamoDB Creation via index.json
+
+Since im using local powershell, i can execute multi-line directly, so created index.json
+[
+    {
+        "IndexName": "ManufacturerIndex",
+        "KeySchema": [
+            {
+                "AttributeName": "manufacturer",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "name",
+                "KeyType": "RANGE"
+            }
+        ],
+        "Projection": {
+            "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        }
+    }
+]
+
+Then created AWS Dynamodb table with this configuration
+
+aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
