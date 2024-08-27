@@ -23,7 +23,6 @@ Based on what i understood, i have made a requirement checklist so that i can co
 - [x] Improved login screen with better UI
 - [x] Added signup functionality
 - [x] Implement routing for login, signup, and dashboard pages
-- [x] Use Chakra UI for improved styling
 
 ## Detailed Implementation Checklist
 
@@ -33,7 +32,8 @@ Based on what i understood, i have made a requirement checklist so that i can co
   - [x] Create endpoints for login, signup, starships, and manufacturers
   - [x] Implement token-based authentication
   - [x] Use environment variables for configuration
-  - [x] Prepare for serverless deployment (Lambda function handler)
+  - [x] Implement in-memory storage for local development
+  - [ ] Prepare for serverless deployment (Lambda function handler)
 
 - [x] Frontend web application (React + TypeScript + Vite)
   - [x] Set up project with Vite and TypeScript
@@ -77,18 +77,18 @@ Based on what i understood, i have made a requirement checklist so that i can co
   - [x] Use TypeScript for type safety
   - [x] Implement proper error handling and logging
 
-- [x] Preparation for AWS Deployment
-  - [x] Create Lambda function handler (lambda.py)
-  - [x] Prepare backend for DynamoDB integration (for production use)
-  - [x] Set up build process for frontend deployment to S3
+- [ ] Preparation for AWS Deployment
+  - [ ] Create Lambda function handler (lambda.py)
+  - [ ] Prepare backend for DynamoDB integration (for production use)
+  - [ ] Set up build process for frontend deployment to S3
 
 ## Additional Considerations and Future Improvements (If time permits)
 
+- [x] Implement caching for SWAPI requests to improve performance
 - [ ] Enhance security with JWT implementation
 - [ ] Add comprehensive unit and integration tests
 - [ ] Set up CI/CD pipeline for automated testing and deployment
 - [ ] Implement logging and monitoring solutions for production
-- [ ] Add caching strategies to improve performance
 - [ ] Implement pagination for the starships list
 - [ ] Further improve responsive design for various device sizes
 - [ ] Enhance accessibility features
@@ -244,3 +244,17 @@ npm run build
 8. Responsive Design: Ensure the frontend is responsive and works well on various device sizes.
 9. Accessibility: Implement accessibility features to ensure the application is usable by people with disabilities.
 10. State Management: For larger applications, consider using a state management library like Redux or MobX.
+
+
+
+# AWS
+
+aws dynamodb create-table \
+  --table-name starwarsBFF \
+  --attribute-definitions \
+    AttributeName=PK,AttributeType=S \
+    AttributeName=SK,AttributeType=S \
+  --key-schema \
+    AttributeName=PK,KeyType=HASH \
+    AttributeName=SK,KeyType=RANGE \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5

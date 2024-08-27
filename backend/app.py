@@ -1,13 +1,15 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
 import os
 import requests
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from dotenv import load_dotenv
 from functools import wraps
 import bcrypt
 import uuid
 import time
 from requests.exceptions import RequestException, Timeout
+import boto3
+from botocore.exceptions import ClientError
 
 load_dotenv()
 
@@ -17,15 +19,17 @@ CORS(app)
 # Determine if we're running locally or in AWS
 IS_LOCAL = os.getenv('IS_LOCAL', 'true').lower() == 'true'
 
-if not IS_LOCAL:
-    import boto3
-    dynamodb = boto3.resource('dynamodb')
-    users_table = dynamodb.Table(os.getenv('USERS_TABLE_NAME', 'users'))
-    auth_table = dynamodb.Table(os.getenv('AUTH_TABLE_NAME', 'auth-tokens'))
+# DynamoDB setup
+if IS_LOCAL:
+    dynamodb = boto3.resource('dynamodb', 
+                              endpoint_url="http://localhost:8000",
+                              region_name="us-west-2",
+                              aws_access_key_id="fakeMyKeyId",
+                              aws_secret_access_key="fakeSecretAccessKey")
 else:
-    # Local storage for development
-    local_users = {}
-    local_tokens = {}
+    dynamodb = boto3.resource('dynamodb')
+
+table = dynamodb.Table(os.getenv('TABLE_NAME', 'starwarsBFF'))
 
 # Caching setup
 starships_cache = {"data": None, "timestamp": 0}
@@ -41,14 +45,12 @@ def require_auth(f):
     return decorated
 
 def is_valid_token(token):
-    if IS_LOCAL:
-        return token in local_tokens
-    else:
-        try:
-            response = auth_table.get_item(Key={'token': token})
-            return 'Item' in response
-        except:
-            return False
+    try:
+        response = table.get_item(Key={'PK': f'TOKEN#{token}', 'SK': 'AUTH'})
+        return 'Item' in response
+    except ClientError as e:
+        print(f"Error checking token: {e.response['Error']['Message']}")
+        return False
 
 def get_cached_data(cache, url):
     current_time = time.time()
@@ -75,22 +77,20 @@ def signup():
     
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     
-    if IS_LOCAL:
-        if username in local_users:
+    try:
+        table.put_item(
+            Item={
+                'PK': f'USER#{username}',
+                'SK': 'PROFILE',
+                'username': username,
+                'password': hashed_password.decode('utf-8')
+            },
+            ConditionExpression='attribute_not_exists(PK)'
+        )
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
             return jsonify({"error": "Username already exists"}), 409
-        local_users[username] = hashed_password
-    else:
-        try:
-            users_table.put_item(
-                Item={
-                    'username': username,
-                    'password': hashed_password.decode('utf-8')
-                },
-                ConditionExpression='attribute_not_exists(username)'
-            )
-        except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
-            return jsonify({"error": "Username already exists"}), 409
-        except Exception as e:
+        else:
             app.logger.error(f"Error during signup: {str(e)}")
             return jsonify({"error": "An error occurred during signup"}), 500
     
@@ -102,25 +102,22 @@ def login():
     username = data.get('username')
     password = data.get('password')
     
-    if IS_LOCAL:
-        stored_password = local_users.get(username)
-    else:
-        try:
-            response = users_table.get_item(Key={'username': username})
-            stored_password = response.get('Item', {}).get('password')
-        except Exception as e:
-            app.logger.error(f"Error during login: {str(e)}")
-            return jsonify({"error": "An error occurred during login"}), 500
-    
-    if stored_password and bcrypt.checkpw(password.encode('utf-8'), stored_password):
-        token = str(uuid.uuid4())
-        if IS_LOCAL:
-            local_tokens[token] = username
+    try:
+        response = table.get_item(Key={'PK': f'USER#{username}', 'SK': 'PROFILE'})
+        user = response.get('Item')
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            token = str(uuid.uuid4())
+            table.put_item(Item={
+                'PK': f'TOKEN#{token}',
+                'SK': 'AUTH',
+                'username': username
+            })
+            return jsonify({"access_token": token, "token_type": "bearer"})
         else:
-            auth_table.put_item(Item={'token': token, 'username': username})
-        return jsonify({"access_token": token, "token_type": "bearer"})
-    else:
-        return jsonify({"error": "Invalid credentials"}), 401
+            return jsonify({"error": "Invalid credentials"}), 401
+    except ClientError as e:
+        app.logger.error(f"Error during login: {str(e)}")
+        return jsonify({"error": "An error occurred during login"}), 500
 
 @app.route('/starships', methods=['GET'])
 @require_auth
