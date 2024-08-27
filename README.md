@@ -313,6 +313,10 @@ Then created AWS Dynamodb table with this configuration
 
 aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
 
+aws dynamodb create-table --table-name StarWarsStarShipsUsers --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+
+
 ![WhatsApp Image 2024-08-27 at 02 49 06_e228c7ce](https://github.com/user-attachments/assets/82bd38e5-78a2-4e04-a4ea-77256252cf01)
 ![image](https://github.com/user-attachments/assets/022304e9-6f62-4b50-ae52-2413bac74ad5)
 
