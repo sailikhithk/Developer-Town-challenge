@@ -298,6 +298,7 @@ Since im using local powershell, i can execute multi-line directly, so created i
 Then created AWS Dynamodb table with this configuration
 
 aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
+
 ![WhatsApp Image 2024-08-27 at 02 49 06_e228c7ce](https://github.com/user-attachments/assets/82bd38e5-78a2-4e04-a4ea-77256252cf01)
 ![image](https://github.com/user-attachments/assets/022304e9-6f62-4b50-ae52-2413bac74ad5)
 
@@ -307,6 +308,7 @@ aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions
 
 
 ## Lambda Deployment
+aws lambda create-function --function-name star-wars-bff --zip-file fileb://deployment-package.zip --handler lambda_function.lambda_handler --runtime python3.9 --role arn:aws:iam::872378549974:role/StarwarsBFF
 ![image](https://github.com/user-attachments/assets/a7e05384-0be5-43ba-b9ac-c289ebdebbf8)
 ![image](https://github.com/user-attachments/assets/34752046-cee7-4b64-822a-ee6843f86d16)
 

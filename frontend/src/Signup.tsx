@@ -16,7 +16,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://4szijqjuv8.execute-api.us-east-1.amazonaws.com/prod';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');

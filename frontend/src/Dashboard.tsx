@@ -9,7 +9,7 @@ interface Starship {
   cost_in_credits: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://4szijqjuv8.execute-api.us-east-1.amazonaws.com/prod';
 
 const Dashboard: React.FC = () => {
   const [starships, setStarships] = useState<Starship[]>([]);

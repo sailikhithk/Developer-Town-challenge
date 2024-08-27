@@ -5,5 +5,11 @@ C:.
 |   .gitignore
 |   app.py
 |   backend_directory_tree.txt
+|   deployment-package.zip
 |   Makefile
 |   requirements.txt
+|   
++---aws
+|   |   lambda.py
+|   |   requirements.in
+|   |   requirements.txt
