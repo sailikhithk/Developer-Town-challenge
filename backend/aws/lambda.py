@@ -11,6 +11,7 @@ starships_table = dynamodb.Table('StarWarsStarships')
 def lambda_handler(event, context):
     route_key = event.get('httpMethod') + ' ' + event.get('path')
 
+
     if route_key == 'POST /signup':
         return signup_user(event)
     elif route_key == 'POST /login':
@@ -22,10 +23,28 @@ def lambda_handler(event, context):
     elif route_key == 'GET /manufacturers':
         return get_manufacturers()
     else:
-        return {
-            'statusCode': 404,
-            'body': json.dumps({'message': 'Route not found'})
+        return build_response(404, {'message': 'Route not found'})
+
+def build_response(status_code, body):
+    return {
+        'statusCode': status_code,
+        'body': json.dumps(body),
+        'headers': {
+            'Access-Control-Allow-Origin': '*',  # Or specify your origin
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
         }
+    }
+
+def build_cors_preflight_response():
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',  # Or specify your origin
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        }
+    }
 
 def signup_user(event):
     body = json.loads(event['body'])
@@ -44,21 +63,12 @@ def signup_user(event):
             },
             ConditionExpression='attribute_not_exists(username)'  # Ensure the username is unique
         )
-        return {
-            'statusCode': 201,
-            'body': json.dumps({'message': 'User created successfully!'})
-        }
+        return build_response(201, {'message': 'User created successfully!'})
     except ClientError as e:
         if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': 'Username already exists'})
-            }
+            return build_response(400, {'message': 'Username already exists'})
         else:
-            return {
-                'statusCode': 500,
-                'body': json.dumps({'message': 'Internal server error'})
-            }
+            return build_response(500, {'message': 'Internal server error'})
 
 def login_user(event):
     body = json.loads(event['body'])
@@ -77,27 +87,15 @@ def login_user(event):
         )
         item = response.get('Item')
         if not item:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': 'Invalid username or password'})
-            }
+            return build_response(400, {'message': 'Invalid username or password'})
 
         # Verify the password
         if hashed_password == item['password']:
-            return {
-                'statusCode': 200,
-                'body': json.dumps({'message': 'Login successful'})
-            }
+            return build_response(200, {'message': 'Login successful'})
         else:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': 'Invalid username or password'})
-            }
+            return build_response(400, {'message': 'Invalid username or password'})
     except ClientError as e:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'message': 'Internal server error'})
-        }
+        return build_response(500, {'message': 'Internal server error'})
 
 def get_manufacturers_dashboard():
     try:
@@ -114,15 +112,9 @@ def get_manufacturers_dashboard():
                 manufacturers[manufacturer] = []
             manufacturers[manufacturer].append(name)
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps(manufacturers)
-        }
+        return build_response(200, manufacturers)
     except ClientError as e:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'message': 'Internal server error'})
-        }
+        return build_response(500, {'message': 'Internal server error'})
 
 def get_starships_by_manufacturer(event):
     try:
@@ -130,10 +122,7 @@ def get_starships_by_manufacturer(event):
         manufacturer = event.get('queryStringParameters', {}).get('manufacturer')
 
         if not manufacturer:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': 'Manufacturer query parameter is required'})
-            }
+            return build_response(400, {'message': 'Manufacturer query parameter is required'})
 
         # Query the StarWarsStarships table by manufacturer using the GSI
         response = starships_table.query(
@@ -143,15 +132,9 @@ def get_starships_by_manufacturer(event):
 
         starships = response.get('Items', [])
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps(starships)
-        }
+        return build_response(200, starships)
     except ClientError as e:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'message': 'Internal server error'})
-        }
+        return build_response(500, {'message': 'Internal server error'})
 
 def get_manufacturers():
     try:
@@ -161,12 +144,6 @@ def get_manufacturers():
         items = response.get('Items', [])
         manufacturers = set(item['manufacturer'] for item in items)
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps(list(manufacturers))
-        }
+        return build_response(200, list(manufacturers))
     except ClientError as e:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'message': 'Internal server error'})
-        }
+        return build_response(500, {'message': 'Internal server error'})
