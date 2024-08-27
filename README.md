@@ -266,14 +266,34 @@ npm run build
 
 
 
-# AWS
+# AWS Deployment
 
-aws dynamodb create-table \
-  --table-name starwarsBFF \
-  --attribute-definitions \
-    AttributeName=PK,AttributeType=S \
-    AttributeName=SK,AttributeType=S \
-  --key-schema \
-    AttributeName=PK,KeyType=HASH \
-    AttributeName=SK,KeyType=RANGE \
-  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+## AWS DynamoDB Creation via index.json
+
+Since im using local powershell, i can execute multi-line directly, so created index.json
+[
+    {
+        "IndexName": "ManufacturerIndex",
+        "KeySchema": [
+            {
+                "AttributeName": "manufacturer",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "name",
+                "KeyType": "RANGE"
+            }
+        ],
+        "Projection": {
+            "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        }
+    }
+]
+
+Then created AWS Dynamodb table with this configuration
+
+aws dynamodb create-table --table-name StarWarsStarships --attribute-definitions AttributeName=name,AttributeType=S AttributeName=manufacturer,AttributeType=S --key-schema AttributeName=name,KeyType=HASH AttributeName=manufacturer,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --global-secondary-indexes file://index.json
