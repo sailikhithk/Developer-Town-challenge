@@ -331,6 +331,10 @@ Move frontend build here
 
 ![image](https://github.com/user-attachments/assets/28235d87-6662-4950-afc4-7c6604b69506)
 
+## Website serverless Deployed in AWS, login checks also working
+![image](https://github.com/user-attachments/assets/072081d2-1a75-42e0-b247-ded449c7c1e5)
+
+
 
 
 
