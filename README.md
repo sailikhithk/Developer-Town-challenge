@@ -32,7 +32,8 @@ Based on what i understood, i have made a requirement checklist so that i can co
 ![image](https://github.com/user-attachments/assets/df296d86-530b-4b92-83f2-5c5bd432c741)
 
 ## Manufacturers List After the Starwars theme
-![image](https://github.com/user-attachments/assets/c311e7c4-2097-4c38-b71e-6a3f0b17dc7d)
+![image](https://github.com/user-attachments/assets/44926bdc-0ad3-4299-9db4-d59d4f4d60e3)
+
 
 
 
