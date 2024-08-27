@@ -329,6 +329,7 @@ Move frontend build here
 
 ## API Gateway Configuring
 
+![image](https://github.com/user-attachments/assets/28235d87-6662-4950-afc4-7c6604b69506)
 
 
 
