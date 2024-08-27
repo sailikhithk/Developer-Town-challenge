@@ -25,6 +25,85 @@ Based on what i understood, i have made a requirement checklist so that i can co
 - [x] Implement routing for login, signup, and dashboard pages
 - [x] Use Chakra UI for improved styling
 
+## Detailed Implementation Checklist
+
+- [x] Backend using Python (Flask)
+  - [x] Set up Flask application structure
+  - [x] Implement CORS support for local development
+  - [x] Create endpoints for login, signup, starships, and manufacturers
+  - [x] Implement token-based authentication
+  - [x] Use environment variables for configuration
+  - [x] Prepare for serverless deployment (Lambda function handler)
+
+- [x] Frontend web application (React + TypeScript + Vite)
+  - [x] Set up project with Vite and TypeScript
+  - [x] Implement React components for Login, Signup, and Dashboard
+  - [x] Use React Router for navigation between pages
+  - [x] Integrate Chakra UI for improved styling and layout
+
+- [x] Authentication Features
+  - [x] Implement login functionality
+  - [x] Add signup functionality
+  - [x] Store authentication token in local storage
+  - [x] Protect routes that require authentication
+
+- [x] Starships Display and Filtering
+  - [x] Fetch and display list of Starships in a table
+  - [x] Implement manufacturer dropdown for filtering
+  - [x] Filter Starships by selected manufacturer
+  - [x] Show all Starships when no manufacturer is selected
+
+- [x] UI/UX Improvements
+  - [x] Center Login and Signup forms on the page
+  - [x] Make Login and Signup pages consistent in layout and styling
+  - [x] Implement responsive design for Dashboard
+  - [x] Add error handling and display for login/signup failures
+
+- [x] API Integration
+  - [x] Set up Axios for API calls
+  - [x] Implement API calls for login, signup, starships, and manufacturers
+  - [x] Handle API errors and display appropriate messages
+
+- [x] Environment Configuration
+  - [x] Set up .env files for both frontend and backend
+  - [x] Use environment variables for API URL and other configurations
+
+- [x] CORS and Security
+  - [x] Implement CORS handling in the backend
+  - [x] Set up proper CORS configuration for development and production
+
+- [x] Code Organization and Best Practices
+  - [x] Organize components into separate files
+  - [x] Use TypeScript for type safety
+  - [x] Implement proper error handling and logging
+
+- [x] Preparation for AWS Deployment
+  - [x] Create Lambda function handler (lambda.py)
+  - [x] Prepare backend for DynamoDB integration (for production use)
+  - [x] Set up build process for frontend deployment to S3
+
+## Additional Considerations and Future Improvements (If time permits)
+
+- [ ] Enhance security with JWT implementation
+- [ ] Add comprehensive unit and integration tests
+- [ ] Set up CI/CD pipeline for automated testing and deployment
+- [ ] Implement logging and monitoring solutions for production
+- [ ] Add caching strategies to improve performance
+- [ ] Implement pagination for the starships list
+- [ ] Further improve responsive design for various device sizes
+- [ ] Enhance accessibility features
+- [ ] Consider adding state management (e.g., Redux) for scalability
+- [ ] Implement user profile management and password reset functionality
+- [ ] Add data validation on both frontend and backend
+- [ ] Implement rate limiting and other API security measures
+- [ ] Optimize API calls and implement request batching where appropriate
+- [ ] Add a logout feature and handle token expiration
+- [ ] Implement dark mode toggle using Chakra UI's color mode
+- [ ] Add loading indicators for asynchronous operations
+- [ ] Implement error boundaries for better error handling in React
+- [ ] Add tooltips or help text for better user guidance
+- [ ] Implement lazy loading for route components to improve initial load time
+
 ## Project Structure
 
 ```

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link as ChakraLink, Container, Flex } from "@chakra-ui/react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -24,36 +24,38 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Box maxWidth="400px" margin="auto" mt={8}>
-      <VStack spacing={4} align="flex-start">
-        <Heading>Login</Heading>
-        {error && <Text color="red.500">{error}</Text>}
-        <form onSubmit={handleLogin} style={{ width: '100%' }}>
-          <VStack spacing={4}>
-            <FormControl isRequired>
-              <FormLabel>Username</FormLabel>
-              <Input 
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>Password</FormLabel>
-              <Input 
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormControl>
-            <Button type="submit" colorScheme="blue" width="full">Login</Button>
-          </VStack>
-        </form>
-        <Text>
-          Don't have an account? <ChakraLink as={Link} to="/signup" color="blue.500">Sign up</ChakraLink>
-        </Text>
-      </VStack>
-    </Box>
+    <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
+      <Container maxW="lg" py={12}>
+        <VStack spacing={8} w="full">
+          <Heading>Login</Heading>
+          {error && <Text color="red.500">{error}</Text>}
+          <Box as="form" onSubmit={handleLogin} width="full">
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Username</FormLabel>
+                <Input 
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input 
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </FormControl>
+              <Button type="submit" colorScheme="blue" width="full">Login</Button>
+            </VStack>
+          </Box>
+          <Text>
+            Don't have an account? <ChakraLink as={Link} to="/signup" color="blue.500">Sign up</ChakraLink>
+          </Text>
+        </VStack>
+      </Container>
+    </Flex>
   );
 };
 
